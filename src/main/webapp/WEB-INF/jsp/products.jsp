@@ -95,6 +95,37 @@
             font-weight: 600;
         }
         
+        .search-container {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            padding-left: 45px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--dark-surface);
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -195,6 +226,14 @@
             box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4);
         }
         
+        .no-products {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+        
         @media (max-width: 768px) {
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -236,9 +275,14 @@
         
         <h2 class="page-title">Available Products</h2>
         
-        <div class="products-grid">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search products by name..." />
+        </div>
+        
+        <div class="products-grid" id="productsGrid">
             <c:forEach var="product" items="${products}">
-                <div class="product-card">
+                <div class="product-card" data-name="${product.name.toLowerCase()}">
                     <div class="product-image">
                         <i class="fas fa-box"></i>
                     </div>
@@ -258,5 +302,41 @@
         </div>
         
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                productCards.forEach(card => {
+                    const productName = card.getAttribute('data-name');
+                    
+                    if (productName.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Check if all products are hidden
+                const visibleProducts = document.querySelectorAll('.product-card[style="display: block"]');
+                let noProductsMessage = document.querySelector('.no-products');
+                
+                if (visibleProducts.length === 0 && searchTerm !== '') {
+                    if (!noProductsMessage) {
+                        noProductsMessage = document.createElement('div');
+                        noProductsMessage.className = 'no-products';
+                        noProductsMessage.innerHTML = '<i class="fas fa-search" style="font-size: 40px; margin-bottom: 15px;"></i><p>No products found matching your search.</p>';
+                        document.getElementById('productsGrid').appendChild(noProductsMessage);
+                    }
+                } else if (noProductsMessage) {
+                    noProductsMessage.remove();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
