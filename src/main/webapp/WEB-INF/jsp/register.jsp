@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login | K-Art</title>
+<title>Register | K-Art</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     :root {
@@ -20,7 +19,6 @@
         --text-secondary: #b0b0b0;
         --error: #ef4444;
         --success: #10b981;
-        --border-color: rgba(255, 255, 255, 0.1);
         --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     
@@ -95,7 +93,7 @@
         z-index: 1;
     }
     
-    .login-card {
+    .register-card {
         background: var(--dark-card);
         border-radius: 16px;
         padding: 30px;
@@ -106,7 +104,7 @@
         overflow: hidden;
     }
     
-    .login-card::before {
+    .register-card::before {
         content: '';
         position: absolute;
         top: 0;
@@ -119,11 +117,11 @@
         transition: transform 0.6s ease;
     }
     
-    .login-card:hover::before {
+    .register-card:hover::before {
         transform: scaleX(1);
     }
     
-    .login-card:hover {
+    .register-card:hover {
         transform: translateY(-10px) scale(1.01);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     }
@@ -135,7 +133,7 @@
         transition: var(--transition);
     }
     
-    .login-card:hover .logo {
+    .register-card:hover .logo {
         transform: translateY(-5px);
     }
     
@@ -264,10 +262,10 @@
         transform: translateY(-50%) scale(1.1);
     }
     
-    .login-btn {
+    .register-btn {
         width: 100%;
         padding: 16px;
-        background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+        background: linear-gradient(90deg, var(--success) 0%, #34d399 100%);
         color: white;
         border: none;
         border-radius: 12px;
@@ -280,7 +278,7 @@
         overflow: hidden;
     }
     
-    .login-btn::before {
+    .register-btn::before {
         content: '';
         position: absolute;
         top: 0;
@@ -291,36 +289,36 @@
         transition: 0.5s;
     }
     
-    .login-btn:hover::before {
+    .register-btn:hover::before {
         left: 100%;
     }
     
-    .login-btn:hover {
-        background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+    .register-btn:hover {
+        background: linear-gradient(90deg, #059669 0%, var(--success) 100%);
         transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
     }
     
-    .login-btn:active {
+    .register-btn:active {
         transform: translateY(1px) scale(0.99);
     }
     
-    .register-link {
+    .login-link {
         text-align: center;
         margin-top: 20px;
         padding-top: 20px;
         border-top: 1px solid var(--border-color);
     }
     
-    .register-link a {
-        color: var(--success);
+    .login-link a {
+        color: var(--primary);
         text-decoration: none;
         font-weight: 600;
         transition: var(--transition);
     }
     
-    .register-link a:hover {
-        color: #34d399;
+    .login-link a:hover {
+        color: var(--primary-light);
         text-decoration: underline;
     }
     
@@ -330,6 +328,17 @@
         padding: 12px;
         border-radius: 8px;
         border: 1px solid rgba(239, 68, 68, 0.3);
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 14px;
+    }
+    
+    .success-message {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(16, 185, 129, 0.3);
         margin-bottom: 20px;
         text-align: center;
         font-size: 14px;
@@ -374,6 +383,10 @@
         animation-delay: 0.3s;
     }
     
+    .form-group:nth-child(3) .input-with-icon input {
+        animation-delay: 0.4s;
+    }
+    
     @keyframes inputSlide {
         to {
             opacity: 1;
@@ -383,7 +396,7 @@
     
     /* Responsive design */
     @media (max-width: 480px) {
-        .login-card {
+        .register-card {
             padding: 25px 20px;
         }
         
@@ -401,24 +414,20 @@
 </div>
 
 <div class="container">
-    <div class="login-card">
+    <div class="register-card">
         <div class="logo">
             <h1>K-Art</h1>
-            <p>Login to your account</p>
+            <p>Create your account</p>
         </div>
 
-        <c:if test="${not empty error}">
-            <div class="error-message">
-                <i class="fas fa-exclamation-circle"></i> ${error}
-            </div>
-        </c:if>
 
-        <form action="login" method="post">
+        <form action="register" method="post" id="registerForm">
             <div class="form-group">
                 <label for="username">Username</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required 
+                           minlength="3" maxlength="50" value="${param.username}">
                 </div>
             </div>
 
@@ -426,43 +435,78 @@
                 <label for="password">Password</label>
                 <div class="input-with-icon">
                     <i class="fas fa-lock"></i>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required 
+                           minlength="6" maxlength="100">
                     <button type="button" class="toggle-password" id="togglePassword">
                         <i class="far fa-eye"></i>
                     </button>
                 </div>
             </div>
 
-            <button type="submit" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i> Login
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                    <button type="button" class="toggle-password" id="toggleConfirmPassword">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="register-btn">
+                <i class="fas fa-user-plus"></i> Create Account
             </button>
         </form>
 
-        <div class="register-link">
-            Don't have an account? <a href="register">Create one here</a>
+        <div class="login-link">
+            Already have an account? <a href="/">Login here</a>
         </div>
     </div>
 </div>
 
 <script>
     // Toggle password visibility
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const passwordInput = document.getElementById('password');
-        const icon = this.querySelector('i');
+    function setupPasswordToggle(toggleId, passwordId) {
+        document.getElementById(toggleId).addEventListener('click', function() {
+            const passwordInput = document.getElementById(passwordId);
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    }
+    
+    setupPasswordToggle('togglePassword', 'password');
+    setupPasswordToggle('toggleConfirmPassword', 'confirmPassword');
+    
+    // Form validation
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
         
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+            return false;
+        }
+        
+        if (password.length < 6) {
+            e.preventDefault();
+            alert('Password must be at least 6 characters long!');
+            return false;
         }
     });
     
     // Add subtle hover effect to the entire card
-    const card = document.querySelector('.login-card');
+    const card = document.querySelector('.register-card');
     card.addEventListener('mousemove', function(e) {
         const x = e.clientX - this.getBoundingClientRect().left;
         const y = e.clientY - this.getBoundingClientRect().top;
